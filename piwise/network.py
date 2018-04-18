@@ -269,7 +269,7 @@ class SegNet(nn.Module):
         enc1 = self.enc1(torch.cat([dec1, enc2], 1))
 
         return F.upsample_bilinear(self.final(enc1), x.size()[2:])
-
+        # return F.upsample(self.final(enc1), x.size()[2:])
 
 class PSPDec(nn.Module):
 

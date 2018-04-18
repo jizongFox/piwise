@@ -45,10 +45,16 @@ class Colorize:
 
     def __call__(self, gray_image):
         size = gray_image.size()
-        color_image = torch.ByteTensor(3, size[1], size[2]).fill_(0)
+
+        try:
+            color_image = torch.ByteTensor(3, size[1], size[2]).fill_(0)
+        except:
+            color_image = torch.ByteTensor(3, size[0], size[1]).fill_(0)
+
+
 
         for label in range(1, len(self.cmap)):
-            mask = gray_image[0] == label
+            mask = gray_image == label
 
             color_image[0][mask] = self.cmap[label][0]
             color_image[1][mask] = self.cmap[label][1]

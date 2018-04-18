@@ -22,11 +22,13 @@ def image_basename(filename):
 class VOC12(Dataset):
 
     def __init__(self, root, input_transform=None, target_transform=None):
-        self.images_root = os.path.join(root, 'images')
-        self.labels_root = os.path.join(root, 'labels')
+        root = 'E:\Applications\QuindiTech\Semantic Segmentation\VOC2012'
 
-        self.filenames = [image_basename(f)
-            for f in os.listdir(self.labels_root) if is_image(f)]
+        self.images_root = os.path.join(root, 'JPEGImages')
+        self.labels_root = os.path.join(root, 'SegmentationClass')
+
+
+        self.filenames = [image_basename(f) for f in os.listdir(self.labels_root) if is_image(f)]
         self.filenames.sort()
 
         self.input_transform = input_transform

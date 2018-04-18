@@ -52,8 +52,8 @@ def train(args, model):
     if args.model.startswith('PSP'):
         optimizer = SGD(model.parameters(), 1e-2, .9, 1e-4)
     if args.model.startswith('Seg'):
-        optimizer = SGD(model.parameters(), 1e-3, .9)
-
+        # optimizer = SGD(model.parameters(), 1e-3, .9)
+        optimizer = Adam(model.parameters(),lr=1e-2, weight_decay=1e-8)
     if args.steps_plot > 0:
         board = Dashboard(args.port)
 
@@ -129,8 +129,7 @@ def main(args):
         try:
             model.load_state_dict(torch.load(args.state))
         except AssertionError:
-            model.load_state_dict(torch.load(args.state,
-                map_location=lambda storage, loc: storage))
+            model.load_state_dict(torch.load(args.state, map_location=lambda storage, loc: storage))
 
     if args.mode == 'eval':
         evaluate(args, model)
@@ -141,7 +140,7 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('--cuda', action='store_true')
     parser.add_argument('--model', required=True)
-    parser.add_argument('--state')
+    parser.add_argument('--state',type=str, default=False)
 
     subparsers = parser.add_subparsers(dest='mode')
     subparsers.required = True
@@ -151,7 +150,7 @@ if __name__ == '__main__':
     parser_eval.add_argument('label')
 
     parser_train = subparsers.add_parser('train')
-    parser_train.add_argument('--port', type=int, default=80)
+    parser_train.add_argument('--port', type=int, default=8097)
     parser_train.add_argument('--datadir', required=True)
     parser_train.add_argument('--num-epochs', type=int, default=32)
     parser_train.add_argument('--num-workers', type=int, default=4)
